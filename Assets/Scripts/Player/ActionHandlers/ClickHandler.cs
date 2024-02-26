@@ -47,19 +47,18 @@ namespace Player.ActionHandlers
             PointerDownEvent?.Invoke(_pointerDownPosition);
 
             _pointerDownPosition = new Vector3(_pointerDownPosition.x, _pointerDownPosition.y, .0f);
-            _previousPointerPosition = _pointerDownPosition;
+
+            _previousPointerPosition = Input.mousePosition;
         }
 
         private void OnInputButton()
         {
             if (_isDrag)
             {
-                var currentPointerPosition = CameraHolder.Instance.MainCamera.ScreenToWorldPoint(Input.mousePosition);
-                currentPointerPosition.z = 0f;
-                var pointerDelta = currentPointerPosition - _previousPointerPosition;
+                var pointerDelta = Input.mousePosition - _previousPointerPosition;
                 DragEvent?.Invoke(pointerDelta);
 
-                _previousPointerPosition = currentPointerPosition;
+                _previousPointerPosition = Input.mousePosition;
             }
         }
 
@@ -99,7 +98,7 @@ namespace Player.ActionHandlers
         }
 
         /*
-        Delete SetDragEventHandlers and ClearEvents for two reasons:
+        I deleted SetDragEventHandlers and ClearEvents for two reasons:
         1) Now we have the DragEvent event, and the list of parameters for functions would grow to three.
             First of all, this is a lot, and secondly, not not all ClickHandler users need or will need all events in the future.
             As a result, we get complex and various cases, which we should avoid.

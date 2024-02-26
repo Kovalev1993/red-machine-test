@@ -407,3 +407,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   activityType: 1
+  _movingMultiplier: 0.01
+  _transform: {fileID: 2040505404}
