@@ -9,7 +9,7 @@ namespace Player.ActionHandlers
     public class ClickHandler : DontDestroyMonoBehaviourSingleton<ClickHandler>
     {
         [SerializeField] private float clickToDragDuration;
-        [SerializeField] private int _controlMouseButton = 0; // Иначе магическое число. К тому же теперь имеем возможность менять управление.
+        [SerializeField] private int _controlMouseButton = 0; // Otherwise the magic number. Besides, we can change controls now.
 
         public event Action<Vector3> PointerDownEvent;
         public event Action<Vector3> ClickEvent;
@@ -28,7 +28,7 @@ namespace Player.ActionHandlers
 
         private void Update()
         {
-            // Вынесение метода - это просто практика чистого кода. Теперь поддержка проекта чуть легче.
+            // Taking out a method is just part of clean code practice. Now supporting the project is a little easier.
             if (Input.GetMouseButtonDown(_controlMouseButton))
                 OnInputButtonDown();
             else if (Input.GetMouseButton(_controlMouseButton))
@@ -99,13 +99,13 @@ namespace Player.ActionHandlers
         }
 
         /*
-        Избавился от SetDragEventHandlers и ClearEvents по двум причинам:
-        1) Т.к. теперь появилось событие DragEvent, список параметров у функций вырос бы до трёх. Во-первых, это много, во-вторых, не
-            всем пользователям ClickHandler'а требуется или будут требоваться в будущем все события. Получаются сложные и разнообразные кейсы,
-            от которых лучше избавиться.
-        2) Наличие функций SetDragEventHandlers и ClearEvents нарушает единообразие использования ClickHandler'а. В одном случае мы
-            вне класса подписываемся на его события с помощью +=, а в другом с помощью SetDragEventHandlers. Лучше, чтобы везде
-            использование было одинаковым.
+        Delete SetDragEventHandlers and ClearEvents for two reasons:
+        1) Now we have the DragEvent event, and the list of parameters for functions would grow to three.
+            First of all, this is a lot, and secondly, not not all ClickHandler users need or will need all events in the future.
+            As a result, we get complex and various cases, which we should avoid.
+        2) The existence of the SetDragEventHandlers and ClearEvents functions breaks the consistency of ClickHandler usage.
+            In one case we outside the class subscribe to its events with the help of +=, and in the other case with the help of
+            SetDragEventHandlers. The same usage everywhere would be better.
         */
     }
 }
