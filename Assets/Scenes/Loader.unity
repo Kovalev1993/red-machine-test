@@ -154,6 +154,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   activityType: 1
   clickToDragDuration: 0
+  _controlMouseButton: 0
 --- !u!4 &385385896
 Transform:
   m_ObjectHideFlags: 0
