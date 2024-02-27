@@ -9,7 +9,7 @@ namespace Player.ActionHandlers
     public class ClickHandler : DontDestroyMonoBehaviourSingleton<ClickHandler>
     {
         [SerializeField] private float clickToDragDuration;
-        [SerializeField] private int _controlMouseButton = 0; // Otherwise the magic number. Besides, we can change controls now.
+        [SerializeField] private int _controlMouseButton; // Otherwise the magic number. Besides, we can change controls now.
 
         public event Action<Vector3> PointerDownEvent;
         public event Action<Vector3> ClickEvent;
@@ -100,7 +100,7 @@ namespace Player.ActionHandlers
         /*
         I deleted SetDragEventHandlers and ClearEvents for two reasons:
         1) Now we have the DragEvent event, and the list of parameters for functions would grow to three.
-            First of all, this is a lot, and secondly, not not all ClickHandler users need or will need all events in the future.
+            First of all, this is a lot, and secondly, not all ClickHandler users need or will need all events in the future.
             As a result, we get complex and various cases, which we should avoid.
         2) The existence of the SetDragEventHandlers and ClearEvents functions breaks the consistency of ClickHandler usage.
             In one case we outside the class subscribe to its events with the help of +=, and in the other case with the help of

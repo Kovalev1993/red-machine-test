@@ -1,6 +1,5 @@
 using Player;
 using Player.ActionHandlers;
-using TMPro;
 using UnityEngine;
 using Utils.Singleton;
 
@@ -9,41 +8,28 @@ namespace Camera
     public class CameraMover : DontDestroyMonoBehaviourSingleton<CameraMover>
     {
         [Header("Settings")]
-        [SerializeField] private float _movingMultiplier;
-        [SerializeField] private float _movingDuration;
-        [SerializeField] private float _smoothTime;
+        [SerializeField] private float _speed;
+        [SerializeField] private float _smoothness;
 
         [Header("Components")]
         [SerializeField] private Transform _transform;
 
         private ClickHandler _clickHandler;
-
-        private float _startTime;
         private Vector3 _targetPosition;
+        private float _screenAverageDimension;
 
         private void Awake()
         {
             _clickHandler = ClickHandler.Instance;
-            _clickHandler.DragStartEvent += OnDragStart;
             _clickHandler.DragEvent += OnDrag;
-            _clickHandler.DragEndEvent += OnDragEnd;
 
             _targetPosition = transform.position;
+            _screenAverageDimension = 0.5f * (Screen.width + Screen.height);
         }
 
         private void OnDestroy()
         {
-            _clickHandler.DragStartEvent -= OnDragStart;
             _clickHandler.DragEvent -= OnDrag;
-            _clickHandler.DragEndEvent -= OnDragEnd;
-        }
-
-        private void OnDragStart(Vector3 startPosition)
-        {
-            if (!CanBeDraggable())
-                return;
-
-            _startTime = Time.time;
         }
 
         private void OnDrag(Vector3 dragDelta)
@@ -51,17 +37,7 @@ namespace Camera
             if (!CanBeDraggable())
                 return;
 
-            if (dragDelta! != Vector3.zero)
-                _startTime = Time.time;
-            _targetPosition = _targetPosition + _movingMultiplier * dragDelta;
-        }
-
-        private void OnDragEnd(Vector3 endPosition)
-        {
-            if (!CanBeDraggable())
-                return;
-
-            //_targetPosition = transform.position;
+            _targetPosition = _targetPosition + _speed * dragDelta / _screenAverageDimension;
         }
 
         private bool CanBeDraggable()
@@ -69,19 +45,25 @@ namespace Camera
             return PlayerController.PlayerState == PlayerState.None;
         }
 
-        private void FixedUpdate()
+        private void LateUpdate()
         {
-            if (_movingDuration == 0)
-            {
-                transform.position = _targetPosition;
-            }
+            if (transform.position == _targetPosition)
+                return;
+
+            if (_smoothness == 0)
+                MoveInstantly();
             else
-            {
-                //var delta = Mathf.Clamp01((Time.time - _startTime) / _movingDuration);
-                //transform.position = Vector3.Lerp(transform.position, _targetPosition, delta);
-                var velocity = Vector3.zero;
-                transform.position = Vector3.SmoothDamp(transform.position, _targetPosition, ref velocity, _smoothTime);
-            }
+                MoveSmoothly();
+        }
+
+        private void MoveInstantly()
+        {
+            transform.position = _targetPosition;
+        }
+
+        private void MoveSmoothly()
+        {
+            transform.position = Vector3.Lerp(transform.position, _targetPosition, Time.deltaTime * _smoothness);
         }
     }
 }
