@@ -103,8 +103,8 @@ namespace Player.ActionHandlers
             First of all, this is a lot, and secondly, not all ClickHandler users need or will need all events in the future.
             As a result, we get complex and various cases, which we should avoid.
         2) The existence of the SetDragEventHandlers and ClearEvents functions breaks the consistency of ClickHandler usage.
-            In one case we outside the class subscribe to its events with the help of +=, and in the other case with the help of
-            SetDragEventHandlers. The same usage everywhere would be better.
+            In one case we subscribe with help of +=, and in the other case with help of SetDragEventHandlers.
+            The same usage everywhere would be better.
         */
     }
 }
