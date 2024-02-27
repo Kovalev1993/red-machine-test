@@ -9,7 +9,7 @@ namespace Camera
     {
         [Header("Settings")]
         [SerializeField] private float _speed;
-        [SerializeField] private float _smoothness;
+        [SerializeField] private float _damper;
 
         [Header("Components")]
         [SerializeField] private Transform _transform;
@@ -17,6 +17,11 @@ namespace Camera
         private ClickHandler _clickHandler;
         private Vector3 _targetPosition;
         private float _screenAverageDimension;
+
+        public void MoveToHomePosition()
+        {
+            _targetPosition = new Vector3(0, 0, transform.position.z);
+        }
 
         private void Awake()
         {
@@ -50,7 +55,7 @@ namespace Camera
             if (transform.position == _targetPosition)
                 return;
 
-            if (_smoothness == 0)
+            if (_damper == 0)
                 MoveInstantly();
             else
                 MoveSmoothly();
@@ -63,7 +68,7 @@ namespace Camera
 
         private void MoveSmoothly()
         {
-            transform.position = Vector3.Lerp(transform.position, _targetPosition, Time.deltaTime * _smoothness);
+            transform.position = Vector3.Lerp(transform.position, _targetPosition, Time.deltaTime * _damper);
         }
     }
 }
